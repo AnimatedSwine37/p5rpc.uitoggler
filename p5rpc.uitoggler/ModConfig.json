@@ -1,0 +1,21 @@
+{
+  "ModId": "p5rpc.uitoggler",
+  "ModName": "Persona 5 Royal UI Toggler",
+  "ModAuthor": "AnimatedSwine37",
+  "ModVersion": "1.0.0",
+  "ModDescription": "Makes it so you can toggle the game's UI with the press of a button",
+  "ModDll": "p5rpc.uitoggler.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/p5rpc.uitoggler.dll",
+  "ModR2RManagedDll64": "x64/p5rpc.uitoggler.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "p5rpc.uitoggler.ReleaseMetadata.json",
+  "PluginData": {},
+  "IsUniversalMod": false,
+  "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "Reloaded.Memory.SigScan.ReloadedII" ],
+  "OptionalDependencies": [],
+  "SupportedAppId": ["p5r.exe"],
+  "ProjectUrl": ""
+}

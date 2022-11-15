@@ -162,7 +162,7 @@ param (
     $UseScriptDirectory=$True,
 
     ## => User Config <= ## 
-    $ProjectPath = "p5rpc.uitoggler.csproj",
+    $ProjectPath = "p5rpc.uitoggler/p5rpc.uitoggler.csproj",
     $PackageName = "p5rpc.uitoggler",
     $PublishOutputDir = "Publish/ToUpload",
 

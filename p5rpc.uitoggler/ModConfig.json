@@ -17,5 +17,5 @@
   "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "Reloaded.Memory.SigScan.ReloadedII" ],
   "OptionalDependencies": [],
   "SupportedAppId": ["p5r.exe"],
-  "ProjectUrl": ""
+  "ProjectUrl": "https://github.com/AnimatedSwine37/p5rpc.uitoggler"
 }

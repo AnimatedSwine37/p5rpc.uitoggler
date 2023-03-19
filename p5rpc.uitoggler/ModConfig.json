@@ -2,20 +2,64 @@
   "ModId": "p5rpc.uitoggler",
   "ModName": "Persona 5 Royal UI Toggler",
   "ModAuthor": "AnimatedSwine37",
-  "ModVersion": "1.1.0",
-  "ModDescription": "Makes it so you can toggle the game's UI with the press of a button",
+  "ModVersion": "1.1.1",
+  "ModDescription": "Makes it so you can toggle the game\u0027s UI with the press of a button",
   "ModDll": "p5rpc.uitoggler.dll",
   "ModIcon": "Preview.png",
   "ModR2RManagedDll32": "x86/p5rpc.uitoggler.dll",
   "ModR2RManagedDll64": "x64/p5rpc.uitoggler.dll",
   "ModNativeDll32": "",
   "ModNativeDll64": "",
+  "Tags": [],
+  "CanUnload": false,
+  "HasExports": false,
   "IsLibrary": false,
   "ReleaseMetadataFileName": "p5rpc.uitoggler.ReleaseMetadata.json",
-  "PluginData": {},
+  "PluginData": {
+    "NuGet": {
+      "AllowUpdateFromAnyRepository": false,
+      "DefaultRepositoryUrls": [
+        "http://packages.sewer56.moe:5000/v3/index.json"
+      ]
+    },
+    "GitHubRelease": {
+      "UserName": "AnimatedSwine37",
+      "RepositoryName": "p5rpc.uitoggler",
+      "UseReleaseTag": true,
+      "AssetFileName": "Mod.zip"
+    },
+    "GitHubDependencies": {
+      "IdToConfigMap": {
+        "Reloaded.Memory.SigScan.ReloadedII": {
+          "Config": {
+            "UserName": "Reloaded-Project",
+            "RepositoryName": "Reloaded.Memory.SigScan",
+            "UseReleaseTag": false,
+            "AssetFileName": "Mod.zip"
+          },
+          "ReleaseMetadataName": "Reloaded.Memory.SigScan.ReloadedII.ReleaseMetadata.json"
+        },
+        "reloaded.sharedlib.hooks": {
+          "Config": {
+            "UserName": "Sewer56",
+            "RepositoryName": "Reloaded.SharedLib.Hooks.ReloadedII",
+            "UseReleaseTag": true,
+            "AssetFileName": "reloaded.sharedlib.hooks.zip"
+          },
+          "ReleaseMetadataName": "Sewer56.Update.ReleaseMetadata.json"
+        }
+      }
+    }
+  },
   "IsUniversalMod": false,
-  "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "Reloaded.Memory.SigScan.ReloadedII" ],
+  "ModDependencies": [
+    "p5rpc.inputhook",
+    "Reloaded.Memory.SigScan.ReloadedII",
+    "reloaded.sharedlib.hooks"
+  ],
   "OptionalDependencies": [],
-  "SupportedAppId": ["p5r.exe"],
+  "SupportedAppId": [
+    "p5r.exe"
+  ],
   "ProjectUrl": "https://github.com/AnimatedSwine37/p5rpc.uitoggler"
 }

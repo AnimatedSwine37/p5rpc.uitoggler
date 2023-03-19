@@ -58,6 +58,10 @@ namespace p5rpc.uitoggler
 
         private IInputHook _inputHook;
 
+        private Dictionary<string, IAsmHook> _uiHooks = new();
+
+        private List<IAsmHook> _buttonPromptHooks = new();
+
         public Mod(ModContext context)
         {
             _modLoader = context.ModLoader;
@@ -117,6 +121,54 @@ namespace p5rpc.uitoggler
                 _renderHudHook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress, AsmHookBehaviour.ExecuteFirst).Activate();
             });
 
+            // Hooks for individual things
+            foreach (var sig in Signatures.FunctionSigs)
+            {
+                startupScanner.AddMainModuleScan(sig.Signature, result =>
+                {
+                    if (!result.Found)
+                    {
+                        Utils.LogError($"Unable to find code for {sig.Name}");
+                        return;
+                    }
+                    Utils.LogDebug($"Found {sig.Name} at 0x{result.Offset + Utils.BaseAddress + sig.Offset:X}");
+                    string[] function =
+                    {
+                        "use64",
+                        $"{sig.OriginalCode}",
+                    };
+                    var hook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress + sig.Offset, AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                    var property = typeof(Config).GetProperty($"Hide{sig.Name}");
+                    // Disable the hookPair if the config for it isn't enabled
+                    if (property != null && property.GetValue(_configuration) is bool value && !value)
+                        hook.Disable();
+                    _uiHooks.Add(sig.Name, hook);
+                });
+            }
+
+            // Hooks for inline stuff (just button prompts rn)
+            foreach (var sig in Signatures.ButtonPromptSigs)
+            {
+                startupScanner.AddMainModuleScan(sig.Signature, result =>
+                {
+                    if (!result.Found)
+                    {
+                        Utils.LogError($"Unable to find code for {sig.Name}");
+                        return;
+                    }
+                    Utils.LogDebug($"Found {sig.Name} at 0x{result.Offset + Utils.BaseAddress + sig.Offset:X}");
+                    string[] function =
+{
+                        "use64",
+                        $"{sig.OriginalCode}",
+                    };
+                    var hook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress + sig.Offset, AsmHookBehaviour.DoNotExecuteOriginal).Activate();
+                    if (!_configuration.HideButtonPrompts)
+                        hook.Disable();
+                    _buttonPromptHooks.Add(hook);
+                });
+            }
+
             _inputHook.OnInput += OnInput;
         }
 
@@ -133,15 +185,40 @@ namespace p5rpc.uitoggler
         #region Standard Overrides
         public override void ConfigurationUpdated(Config configuration)
         {
-            // Apply settings from configuration.
-            // ... your code here.
+            // Enable or disable normal hooks
+            foreach (var hookPair in _uiHooks)
+            {
+                var name = hookPair.Key;
+                var hook = hookPair.Value;
+                var property = typeof(Config).GetProperty($"Hide{name}");
+                if (property != null && property.GetValue(configuration) is bool enabled)
+                {
+                    if (enabled)
+                        hook.Enable();
+                    else
+                        hook.Disable();
+                }
+            }
+
+            // Enable or disable button prompt hooks
+            if (_configuration.HideButtonPrompts != configuration.HideButtonPrompts)
+            {
+                foreach (var hook in _buttonPromptHooks)
+                {
+                    if (configuration.HideButtonPrompts)
+                        hook.Enable();
+                    else
+                        hook.Disable();
+                }
+            }
+
             _configuration = configuration;
             _logger.WriteLine($"[{_modConfig.ModId}] Config Updated: Applying");
         }
         #endregion
 
         #region For Exports, Serialization etc.
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null enabled when exiting constructor. Consider declaring as nullable.
         public Mod() { }
 #pragma warning restore CS8618
         #endregion

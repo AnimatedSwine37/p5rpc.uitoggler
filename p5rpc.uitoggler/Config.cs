@@ -26,39 +26,51 @@ namespace p5rpc.uitoggler.Configuration
             The `DefaultValue` attribute is used as part of the `Reset` button in Reloaded-Launcher.
         */
 
-        [DisplayName("Toggle Button")]
-        [Description("The button that you will press to toggle the UI")]
+        [DisplayName("Toggle All Button")]
+        [Description("The button that you will press to toggle the entire UI")]
         [DefaultValue(Key.F2)]
-        public Key ToggleButton { get; set; } = Key.F2;
+        public Key ToggleAllButton { get; set; } = Key.F2;
 
-        [DisplayName("Hide Map")]
-        [Description("If enabled the map will be hidden")]
-        [DefaultValue(false)]
-        public bool HideMap { get; set; } = false;
+        [DisplayName("Toggle Selected Button")]
+        [Description("The button that you will press to toggle any options that are set to \"HideSelectively\"")]
+        [DefaultValue(Key.F3)]
+        public Key ToggleSelectiveButton { get; set; } = Key.F3;
 
-        [DisplayName("Hide Objective")]
-        [Description("If enabled the current objective will be hidden")]
-        [DefaultValue(false)]
-        public bool HideObjective { get; set; } = false;
+        [DisplayName("Map")]
+        [Description("Whether the map will be hidden")]
+        [DefaultValue(HideType.Shown)]
+        public HideType MapHide { get; set; } = HideType.Shown;
 
-        [DisplayName("Hide Cursor")]
-        [Description("If enabled the vibing cursor to the right of messages will be hidden")]
-        [DefaultValue(false)]
-        public bool HideCursor { get; set; } = false;
+        [DisplayName("Objective")]
+        [Description("Whether the current objective will be hidden")]
+        [DefaultValue(HideType.Shown)]
+        public HideType ObjectiveHide { get; set; } = HideType.Shown;
 
-        [DisplayName("Hide Date")]
-        [Description("If enabled the date, weather, etc on the top left will be hidden")]
-        [DefaultValue(false)]
-        public bool HideDate { get; set; } = false;
+        [DisplayName("Message Cursor")]
+        [Description("Whether the vibing cursor to the right of messages will be hidden")]
+        [DefaultValue(HideType.Shown)]
+        public HideType CursorHide { get; set; } = HideType.Shown;
 
-        [DisplayName("Hide Button Prompts")]
-        [Description("If enabled button prompts at the bottom of the screen will be hidden")]
-        [DefaultValue(false)]
-        public bool HideButtonPrompts { get; set; } = false;
+        [DisplayName("Date")]
+        [Description("Whether the date, weather, etc on the top left will be hidden")]
+        [DefaultValue(HideType.Shown)]
+        public HideType DateHide { get; set; } = HideType.Shown;
+
+        [DisplayName("Button Prompts")]
+        [Description("Whether the button prompts at the bottom of the screen will be hidden")]
+        [DefaultValue(HideType.Shown)]
+        public HideType ButtonPromptsHide { get; set; } = HideType.Shown;
 
         [DisplayName("Debug Mode")]
         [Description("Logs additional information to the console that is useful for debugging.")]
         public bool DebugEnabled { get; set; } = false;
+
+        public enum HideType
+        {
+            Shown, 
+            HideSelectively,
+            HideAlways
+        }
 
     }
 

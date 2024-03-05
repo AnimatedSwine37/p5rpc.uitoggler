@@ -1,6 +1,7 @@
 ﻿using p5rpc.inputhook.interfaces;
 using p5rpc.uitoggler.Configuration;
 using p5rpc.uitoggler.Template;
+using p5rpc.uitoggler.Template.Configuration;
 using Reloaded.Hooks.Definitions;
 using Reloaded.Hooks.Definitions.Enums;
 using Reloaded.Hooks.ReloadedII.Interfaces;
@@ -8,6 +9,7 @@ using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using Reloaded.Memory.Sources;
 using Reloaded.Mod.Interfaces;
 using static p5rpc.inputhook.interfaces.Inputs;
+using static p5rpc.uitoggler.Configuration.Config;
 using IReloadedHooks = Reloaded.Hooks.ReloadedII.Interfaces.IReloadedHooks;
 
 namespace p5rpc.uitoggler
@@ -53,6 +55,7 @@ namespace p5rpc.uitoggler
         private nuint _shouldHidePtr;
 
         private bool _shouldHide;
+        private bool _shouldSelectiveHide;
 
         private IAsmHook _renderHudHook;
 
@@ -138,9 +141,9 @@ namespace p5rpc.uitoggler
                         $"{sig.OriginalCode}",
                     };
                     var hook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress + sig.Offset, AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                    var property = typeof(Config).GetProperty($"Hide{sig.Name}");
+                    var property = typeof(Config).GetProperty($"{sig.Name}Hide");
                     // Disable the hookPair if the config for it isn't enabled
-                    if (property != null && property.GetValue(_configuration) is bool value && !value)
+                    if (property != null && property.GetValue(_configuration) is HideType value && value != HideType.HideAlways)
                         hook.Disable();
                     _uiHooks.Add(sig.Name, hook);
                 });
@@ -163,7 +166,7 @@ namespace p5rpc.uitoggler
                         $"{sig.OriginalCode}",
                     };
                     var hook = _hooks.CreateAsmHook(function, result.Offset + Utils.BaseAddress + sig.Offset, AsmHookBehaviour.DoNotExecuteOriginal).Activate();
-                    if (!_configuration.HideButtonPrompts)
+                    if (_configuration.ButtonPromptsHide != HideType.HideAlways)
                         hook.Disable();
                     _buttonPromptHooks.Add(hook);
                 });
@@ -174,12 +177,49 @@ namespace p5rpc.uitoggler
 
         private void OnInput(List<Key> inputs)
         {
-            if (inputs.Contains(_configuration.ToggleButton))
+            if (inputs.Contains(_configuration.ToggleAllButton))
             {
                 _shouldHide = !_shouldHide;
                 Utils.LogDebug($"Turning UI {(_shouldHide ? "off" : "on")}");
                 _memory.Write(_shouldHidePtr, _shouldHide);
             }
+
+            if (inputs.Contains(_configuration.ToggleSelectiveButton))
+            {
+                _shouldSelectiveHide = !_shouldSelectiveHide;
+                Utils.LogDebug($"Selectively {(_shouldSelectiveHide ? "hiding" : "showing")} things");
+                SelectiveHide();
+            }
+        }
+
+        private void SelectiveHide()
+        {
+            // Enable or disable normal hooks
+            foreach (var hookPair in _uiHooks)
+            {
+                var name = hookPair.Key;
+                var hook = hookPair.Value;
+                var property = typeof(Config).GetProperty($"{name}Hide");
+                if (property != null && property.GetValue(_configuration) is HideType hide)
+                {
+                    if (hide == HideType.HideAlways || (hide == HideType.HideSelectively && _shouldSelectiveHide))
+                        hook.Enable();
+                    else
+                        hook.Disable();
+                }
+            }
+
+            // Enable or disable button prompt hooks
+            var hidePrompts = _configuration.ButtonPromptsHide == HideType.HideAlways || (_configuration.ButtonPromptsHide == HideType.HideSelectively && _shouldSelectiveHide);
+
+            foreach (var hook in _buttonPromptHooks)
+            {
+                if (hidePrompts)
+                    hook.Enable();
+                else
+                    hook.Disable();
+            }
+
         }
 
         #region Standard Overrides
@@ -190,10 +230,10 @@ namespace p5rpc.uitoggler
             {
                 var name = hookPair.Key;
                 var hook = hookPair.Value;
-                var property = typeof(Config).GetProperty($"Hide{name}");
-                if (property != null && property.GetValue(configuration) is bool enabled)
+                var property = typeof(Config).GetProperty($"{name}Hide");
+                if (property != null && property.GetValue(configuration) is HideType hide)
                 {
-                    if (enabled)
+                    if (hide == HideType.HideAlways || (hide == HideType.HideSelectively && _shouldSelectiveHide))
                         hook.Enable();
                     else
                         hook.Disable();
@@ -201,11 +241,13 @@ namespace p5rpc.uitoggler
             }
 
             // Enable or disable button prompt hooks
-            if (_configuration.HideButtonPrompts != configuration.HideButtonPrompts)
+            if (_configuration.ButtonPromptsHide != configuration.ButtonPromptsHide)
             {
+                var hide = configuration.ButtonPromptsHide == HideType.HideAlways || (configuration.ButtonPromptsHide == HideType.HideSelectively && _shouldSelectiveHide);
+
                 foreach (var hook in _buttonPromptHooks)
                 {
-                    if (configuration.HideButtonPrompts)
+                    if (hide)
                         hook.Enable();
                     else
                         hook.Disable();

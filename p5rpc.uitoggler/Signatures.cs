@@ -58,7 +58,7 @@ namespace p5rpc.uitoggler
         internal static readonly SigInfo RenderHoldupBreakFormationSig = new SigInfo("48 8B 48 ?? 44 38 A1 ?? ?? ?? ?? 48 8D 4D ?? 74 ?? BA 02 00 00 00", "Holdup Break Formation", "mov rax, [rbx+0x48]", -9);
         internal static readonly SigInfo RenderHoldupTalkSig = new SigInfo("F3 0F 11 45 ?? E8 ?? ?? ?? ?? 48 8D 35 ?? ?? ?? ??", "Holdup Talk < 1.0.4", "movss [rbp+0x68],xmm2", errorOnFail: false);
         internal static readonly SigInfo RenderHoldupTargetSig = new SigInfo("E8 ?? ?? ?? ?? BA 67 00 00 00 48 8B CB", "Holdup Target", "mov edx, 0x67");
-        internal static readonly SigInfo RenderHoldupAOASig = new SigInfo("4C 8B DC 49 89 5B ??d 57 48 83 EC 70 48 81 C2 D8 02 00 00", "Holdup AOA", "ret");
+        internal static readonly SigInfo RenderHoldupAOASig = new SigInfo("4C 8B DC 49 89 5B ?? 57 48 83 EC 70 48 81 C2 D8 02 00 00", "Holdup AOA", "ret");
         internal static readonly SigInfo RenderGunTargetSig = new SigInfo("E8 ?? ?? ?? ?? 48 85 DB 0F 84 ?? ?? ?? ?? 48 8B 7B ?? 48 8B 4F ?? 0F B6 41 ?? F6 D0 A8 01 75 ?? 83 61 ?? FE 48 8B 7B ?? 48 8B 4F ?? 0F B6 41 ?? F6 D0 A8 01 75 ?? 83 61 ?? FE 48 8B 7B ?? 80 3F 00", "Gun Target", "test rbx, rbx");
         internal static readonly SigInfo RenderSkillAimAnalyzeSig = new SigInfo("E8 ?? ?? ?? ?? F3 0F 58 3D ?? ?? ?? ?? F3 0F 11 7D ??", "Skill Analyze", "");
         internal static readonly SigInfo RenderSkillAimTargetSig = new SigInfo("E8 ?? ?? ?? ?? BA 67 00 00 00 48 8B CF", "Skill Target", "mov edx,0x67");

@@ -2,7 +2,7 @@
   "ModId": "p5rpc.uitoggler",
   "ModName": "Persona 5 Royal UI Toggler",
   "ModAuthor": "AnimatedSwine37",
-  "ModVersion": "1.2.1",
+  "ModVersion": "1.2.2",
   "ModDescription": "Makes it so you can toggle the game\u0027s UI with the press of a button",
   "ModDll": "p5rpc.uitoggler.dll",
   "ModIcon": "Preview.png",

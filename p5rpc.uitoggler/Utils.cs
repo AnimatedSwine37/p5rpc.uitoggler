@@ -45,5 +45,16 @@ namespace p5rpc.uitoggler
             _logger.WriteLine($"[UI Toggler] {message}", System.Drawing.Color.Red);
 
         }
+        
+        /// <summary>
+        /// Gets the address of a global from something that references it
+        /// </summary>
+        /// <param name="ptrAddress">The address to the pointer to the global (like in a mov instruction or something)</param>
+        /// <returns>The address of the global</returns>
+        internal static unsafe nuint GetGlobalAddress(nint ptrAddress)
+        {
+            return (nuint)((*(int*)ptrAddress) + ptrAddress + 4);
+        }
+
     }
 }

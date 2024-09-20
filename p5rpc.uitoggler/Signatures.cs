@@ -34,10 +34,10 @@ namespace p5rpc.uitoggler
         };
 
         // Individual item sigs
-        internal static readonly SigInfo RenderCursorSig = new SigInfo("4C 8B DC 53 48 81 EC D0 00 00 00", "Cursor", "ret");
-        internal static readonly SigInfo RenderDateSig = new SigInfo("48 8B C4 53 55 56 57 41 56 48 81 EC D0 00 00 00", "Date", "ret");
+        internal static readonly SigInfo RenderCursorSig = new SigInfo("4C 8B DC 53 48 81 EC D0 00 00 00 F6 01 01", "Cursor", "ret");
+        internal static readonly SigInfo RenderDateSig = new SigInfo("48 8D 05 ?? ?? ?? ?? 8B 53 ?? 81 E2 80 01 00 00 81 FA 80 01 00 00 48 0F 45 C8 49 89 48 ?? 48 8D 0D ?? ?? ?? ??", "Date", "ret", 0, true, 3);
         internal static readonly SigInfo RenderObjectiveSig = new SigInfo("4C 8B DC 55 57 49 8D 6B ?? 48 81 EC 68 01 00 00 8B 42 ??", "Objective", "ret");
-        internal static readonly SigInfo RenderMapSig = new SigInfo("40 53 48 83 EC 20 48 B8 00 00 00 00 40 00 00 00", "Map", string.Join('\n', MapHook));
+        internal static readonly SigInfo RenderMapSig = new SigInfo("48 8D 05 ?? ?? ?? ?? 48 89 42 ?? 4C 89 72 ??", "Map", string.Join('\n', MapHook), 0, true, 3);
 
         // Buttom prompt sigs
         internal static readonly SigInfo RenderFieldButtonPromptsSig = new SigInfo("40 53 48 83 EC 20 F6 82 ?? ?? ?? ?? 01 48 8B DA 74 ?? E8 ?? ?? ?? ?? 66 83 0D ?? ?? ?? ?? 40 48 8B CB E8 ?? ?? ?? ?? 48 8B CB", "Field Buttons", "ret");
@@ -52,18 +52,18 @@ namespace p5rpc.uitoggler
         internal static readonly SigInfo RenderVideoViewingBackConfirmSig = new SigInfo("E8 ?? ?? ?? ?? 49 83 7C 24 ?? 00", "Video Viewing Back Confirm", "cmp qword [r12+10],00");
         internal static readonly SigInfo RenderMainMenuPromptsSig = new SigInfo("48 89 5C 24 ?? 57 48 83 EC 40 80 79 ?? 00 49 8B D8", "Main Menu Prompts", "ret");
         internal static readonly SigInfo RenderSettingsPromptsSig = new SigInfo("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 B3 01", "Settings Prompts", "ret");
-        internal static readonly SigInfo RenderCraftingPromptsSig = new SigInfo("48 8B C4 56 48 81 EC 00 01 00 00 0F 29 70 ?? 48 8B F1 F3 0F 10 71 ??", "Crafting Prompts", "ret");
+        internal static readonly SigInfo RenderCraftingPromptsSig = new SigInfo("E8 ?? ?? ?? ?? F6 47 ?? 08 75 ??", "Crafting Prompts", "ret", 0, true, 1);
         internal static readonly SigInfo RenderShopBackSig = new SigInfo("E8 ?? ?? ?? ?? 49 8B 5E ?? 48 85 DB 0F 84 ?? ?? ?? ??", "Shop Back", "mov rbx, [r14+0x50]");
         internal static readonly SigInfo RenderShopConfirmSig = new SigInfo("E8 ?? ?? ?? ?? 48 8B 0F BA 82 00 00 00", "Shop Confirm", "mov rcx, [rdi]");
-        internal static readonly SigInfo RenderHoldupBreakFormationSig = new SigInfo("E8 ?? ?? ?? ?? 49 8B 47 ?? 48 8B 48 ?? 44 38 A1 ?? ?? ?? ??", "Holdup Break Formation", "mov rax, [rbx+0x48]");
-        internal static readonly SigInfo RenderHoldupTalkSig = new SigInfo("F3 0F 11 85 ?? ?? ?? ?? E8 ?? ?? ?? ?? 49 8B 47 ??", "Holdup Talk", "movss [rbp+0x68],xmm2");
+        internal static readonly SigInfo RenderHoldupBreakFormationSig = new SigInfo("48 8B 48 ?? 44 38 A1 ?? ?? ?? ?? 48 8D 4D ?? 74 ?? BA 02 00 00 00", "Holdup Break Formation", "mov rax, [rbx+0x48]", -9);
+        internal static readonly SigInfo RenderHoldupTalkSig = new SigInfo("F3 0F 11 45 ?? E8 ?? ?? ?? ?? 48 8D 35 ?? ?? ?? ??", "Holdup Talk < 1.0.4", "movss [rbp+0x68],xmm2", errorOnFail: false);
         internal static readonly SigInfo RenderHoldupTargetSig = new SigInfo("E8 ?? ?? ?? ?? BA 67 00 00 00 48 8B CB", "Holdup Target", "mov edx, 0x67");
-        internal static readonly SigInfo RenderHoldupAOASig = new SigInfo("4C 8B DC 49 89 5B ?? 57 48 83 EC 70 48 81 C2 D8 02 00 00", "Holdup AOA", "ret");
+        internal static readonly SigInfo RenderHoldupAOASig = new SigInfo("4C 8B DC 49 89 5B ??d 57 48 83 EC 70 48 81 C2 D8 02 00 00", "Holdup AOA", "ret");
         internal static readonly SigInfo RenderGunTargetSig = new SigInfo("E8 ?? ?? ?? ?? 48 85 DB 0F 84 ?? ?? ?? ?? 48 8B 7B ?? 48 8B 4F ?? 0F B6 41 ?? F6 D0 A8 01 75 ?? 83 61 ?? FE 48 8B 7B ?? 48 8B 4F ?? 0F B6 41 ?? F6 D0 A8 01 75 ?? 83 61 ?? FE 48 8B 7B ?? 80 3F 00", "Gun Target", "test rbx, rbx");
         internal static readonly SigInfo RenderSkillAimAnalyzeSig = new SigInfo("E8 ?? ?? ?? ?? F3 0F 58 3D ?? ?? ?? ?? F3 0F 11 7D ??", "Skill Analyze", "");
         internal static readonly SigInfo RenderSkillAimTargetSig = new SigInfo("E8 ?? ?? ?? ?? BA 67 00 00 00 48 8B CF", "Skill Target", "mov edx,0x67");
         internal static readonly SigInfo RenderPersonaDetailsPromptsSig = new SigInfo("40 53 48 83 EC 20 8B 0D ?? ?? ?? ?? 48 8B DA E8 ?? ?? ?? ?? 48 8B 43 ??", "Persona Details Prompts", "ret");
-        internal static readonly SigInfo RenderResultsNextSig = new SigInfo("F3 0F 11 44 24 ?? E8 ?? ?? ?? ?? BB C8 0F 00 00", "Results Next", "movss [rsp+0x20],xmm0");
+        internal static readonly SigInfo RenderResultsNextSig = new SigInfo("48 8B 0D ?? ?? ?? ?? F3 0F 11 44 24 ?? E8 ?? ?? ?? ??", "Results Next", "movss [rsp+0x20],xmm0", 7);
         internal static readonly SigInfo RenderVelvetRoomPromptsSig = new SigInfo("48 8B C4 F3 0F 11 50 ?? F3 0F 11 48 ?? F3 0F 11 40 ?? 53 41 56 41 57", "Velvet Room Prompts", "ret");
         internal static readonly SigInfo RenderChallengeBattlePromptsSig = new SigInfo("48 8B C4 41 57 48 81 EC 30 01 00 00", "Challenge Battle Menu Prompts", "ret");
         internal static readonly SigInfo RenderEventPromptsSig = new SigInfo("48 85 D2 0F 84 ?? ?? ?? ?? 53 55", "Event Prompts", "ret");
@@ -106,13 +106,32 @@ namespace p5rpc.uitoggler
         /// How much to offset the found address by for the hook
         /// </summary>
         internal int Offset { get; }
-
-        internal SigInfo(string signature, string name, string originalCode, int offset = 0)
+        /// <summary>
+        /// Whether this is a pointer to an address.
+        /// If true, GetGlobalAddress will be used to get the real address
+        /// </summary>
+        internal bool IsPointer { get; }
+        /// <summary>
+        /// How much to offset the found address by for the pointer.
+        /// If IsPointer is true this is used as the offset for GetGlobalAddress,
+        /// Offset is then used for the actual hook.
+        /// </summary>
+        internal int PointerOffset { get; }
+        /// <summary>
+        /// If True logs an error on failure to find the pattern,
+        /// otherwise only info is logged instead.
+        /// </summary>
+        internal bool ErrorOnFail { get; }
+        
+        internal SigInfo(string signature, string name, string originalCode, int offset = 0, bool isPointer = false, int pointerOffset = 0, bool errorOnFail = true)
         {
             Signature = signature;
             Name = name;
             OriginalCode = originalCode;
             Offset = offset;
+            IsPointer = isPointer;
+            PointerOffset = pointerOffset;
+            ErrorOnFail = errorOnFail;
         }
     }
 }
